@@ -2,15 +2,20 @@
 
 import { useMouse } from "@uidotdev/usehooks";
 
+const GRID_COLS = 16;
+
 export function BackgroundGrid() {
   const [mouse] = useMouse();
-  const gridCols = 30;
-  const squareWidth = window.innerWidth / gridCols;
+  const squareWidth = window.innerWidth / GRID_COLS;
   const gridRows = window.innerHeight / squareWidth;
   const xRatio = mouse.x / window.innerWidth;
   const yRatio = mouse.y / window.innerHeight;
-  const gridPosX = (xRatio * gridCols) | 0;
-  const gridPosY = (yRatio * gridRows) | 0;
+  const gridPosX = (xRatio * GRID_COLS) | 0;
+  const gridPosY =
+    ((yRatio * gridRows) | 0) * squareWidth + squareWidth <= window.innerHeight
+      ? (yRatio * gridRows) | 0
+      : // cheat a little and attach to bottom
+        (window.innerHeight - squareWidth) / squareWidth;
 
   return (
     <>
